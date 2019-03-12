@@ -1,24 +1,21 @@
 // This Factory is not used in the framework, this is just an example of possible implementation
 
-const Login = require('../pageObjectModels/loginComponent.js');
+const LoginComp = require('./loginComponent');
+const SearchComp = require('./searchComponent');
 
-var userFactory = function(){
+const constructors = {
+    login: LoginComp,
+    search: SearchComp
+}
 
-    var _this = this;
-
-    _this.getPage = function (page) {
-
-        var pages = {
-
-'login': Login
-
-        };
-
-        if(!pages[page]){
-            throw new Error('Wrong page name: '+pages[page]);
-        };
-
-    };
-};
+const userFactory = {
+    currentPage: null,
+    getPage(name){
+        const Page = constructors[name];
+        const page = new Page();
+        this.currentPage = page;
+        return this.currentPage;
+    }
+}
 
 module.exports = userFactory;
